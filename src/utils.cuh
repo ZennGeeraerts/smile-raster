@@ -1,9 +1,13 @@
+/*=============================================================================*/
+// Copyright 2022-2023 Smile Raster
+// Authors: Zenn Geeraerts
+/*=============================================================================*/
 #include <curand_kernel.h>
 #include <stdio.h>
 #include <stdint.h>
 #include <DirectXMath.h>
 
-namespace Smile
+namespace smile
 {
     namespace Raster
     {

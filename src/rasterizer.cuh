@@ -1,6 +1,10 @@
-#include "DataStructs.cuh"
+/*=============================================================================*/
+// Copyright 2022-2023 Smile Raster
+// Authors: Zenn Geeraerts
+/*=============================================================================*/
+#include "data_structs.cuh"
 
-namespace Smile
+namespace smile
 {
 	namespace Raster
 	{

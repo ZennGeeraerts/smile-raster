@@ -1,10 +1,15 @@
+/*=============================================================================*/
+// Copyright 2022-2023 Smile Raster
+// Authors: Zenn Geeraerts
+/*=============================================================================*/
 #pragma once
 #include <stdint.h>
 #include <DirectXMath.h>
-#include <../../SmileRaster/Libs/glm/glm.hpp>
+#include <glm.hpp>
 #include <unordered_map>
+#include <string>
 
-namespace Smile
+namespace smile
 {
 	namespace Raster
 	{

@@ -1,9 +1,13 @@
-#include "DataStructs.cuh"
+/*=============================================================================*/
+// Copyright 2022-2023 Smile Raster
+// Authors: Zenn Geeraerts
+/*=============================================================================*/
+#include "data_structs.cuh"
 
 #include <cuda_runtime.h>
 #include <device_launch_parameters.h>
 
-namespace Smile
+namespace smile
 {
 	namespace Raster
 	{

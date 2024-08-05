@@ -1,17 +1,23 @@
-#include "Rasterizer.cuh"
+/*=============================================================================*/
+// Copyright 2022-2023 Smile Raster
+// Authors: Zenn Geeraerts
+/*=============================================================================*/
+#include "rasterizer.cuh"
 
-#include "Utils.cuh"
+#include "utils.cuh"
 
 // Pipeline
-#include "Pipeline/InputAssembler.cu"
-#include "Pipeline/VertexShader.cu"
-#include "Pipeline/PrimitiveAssembler.cu"
-#include "Pipeline/RasterizerStage.cu"
-#include "Pipeline/PixelShader.cu"
+#include "pipeline/input_assembler.cuh"
+#include "pipeline/vertex_shader.cuh"
+#include "pipeline/primitive_assembler.cuh"
+#include "pipeline/rasterizer_stage.cuh"
+#include "pipeline/bin_rasterizer.cuh"
+#include "pipeline/fine_rasterizer.cuh"
+#include "pipeline/pixel_shader.cuh"
 
 #include <iostream>
 
-namespace Smile
+namespace smile
 {
 	namespace Raster
 	{

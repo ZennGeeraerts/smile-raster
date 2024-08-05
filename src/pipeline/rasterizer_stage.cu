@@ -1,7 +1,12 @@
-#include "BinRasterizer.cu"
-#include "FineRasterizer.cu"
+/*=============================================================================*/
+// Copyright 2022-2023 Smile Raster
+// Authors: Zenn Geeraerts
+/*=============================================================================*/
+#include "rasterizer_stage.cuh"
+#include "bin_rasterizer.cuh"
+#include "fine_rasterizer.cuh"
 
-namespace Smile
+namespace smile
 {
 	namespace Raster
 	{

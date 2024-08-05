@@ -1,9 +1,10 @@
-#include "DataStructs.cuh"
+/*=============================================================================*/
+// Copyright 2022-2023 Smile Raster
+// Authors: Zenn Geeraerts
+/*=============================================================================*/
+#include "pixel_shader.cuh"
 
-#include <cuda_runtime.h>
-#include <device_launch_parameters.h>
-
-namespace Smile
+namespace smile
 {
 	namespace Raster
 	{
@@ -27,7 +28,7 @@ namespace Smile
 				if (framebuffer.DevDepthBuffer[pixelIndex] < FLT_MAX)
 				{
 					glm::vec3 lightDirection{ 0.577f, -0.577f, 0.577f };
-					glm::vec3 color = Texture2DSample(albedoMap, framebuffer.DevPixelData[pixelIndex].TexCoord);
+					glm::vec3 color = glm::vec3{ 1.0f, 0.0f, 0.0f };
 
 					float diffuseStrength = glm::dot(framebuffer.DevPixelData[pixelIndex].Normal, -lightDirection);
 					diffuseStrength = diffuseStrength * 0.5f + 0.5f;
