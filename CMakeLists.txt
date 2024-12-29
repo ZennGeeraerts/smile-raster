@@ -29,5 +29,4 @@ set_target_properties (${PROJECT_NAME} PROPERTIES FOLDER Dependencies)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE CUDA::cudart)
 
-#add_subdirectory(examples/sdl)
 add_subdirectory(examples/win32)

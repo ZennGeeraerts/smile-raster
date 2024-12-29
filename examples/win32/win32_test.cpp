@@ -169,8 +169,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR lpCmdLine, int nCmdShow
 		indices, 3
 	);
 
-	//pContext->CreateTexture2D();
-
 	while (!g_ShouldClose)
 	{
 		MSG message{};
@@ -185,8 +183,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR lpCmdLine, int nCmdShow
 		DirectX::Colors::DodgerBlue.f[1],
 		DirectX::Colors::DodgerBlue.f[2],
 		DirectX::Colors::DodgerBlue.f[3] }, true);
-
-		//pContext->UploadTexture2D("AlbedoMap", )
 
 		pContext->BindVertexBuffer(vertexBuffer, 12);
 		pContext->BindIndexBuffer(indexBuffer);

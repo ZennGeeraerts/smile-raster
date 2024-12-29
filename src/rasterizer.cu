@@ -55,16 +55,16 @@ namespace smile
 
 			// Input assembler
 			dim3 gridSize = static_cast<uint32_t>(ceil(vertexCount / static_cast<float>(m_RenderConfig.BlockSize)));
-			InputAssemblerKernel << <gridSize, blockSize >> > (m_pVertexBuffer->DevVertices, vertexCount, m_pVertexBuffer->DevVertexShaderInput, m_VertexStride);
+			InputAssemblerKernel<<<gridSize, blockSize>>>(m_pVertexBuffer->DevVertices, vertexCount, m_pVertexBuffer->DevVertexShaderInput, m_VertexStride);
 			GPU_ERROR_CHECK(cudaDeviceSynchronize());
 
 			// VertexShader
-			VertexShaderKernel << <gridSize, blockSize >> > (m_pVertexBuffer->DevVertexShaderInput, m_pVertexBuffer->DevVertexShaderOutput, vertexCount, m_Shader.Mat4Data["ViewProjection"], m_Shader.Mat4Data["World"]);
+			VertexShaderKernel<<<gridSize, blockSize>>>(m_pVertexBuffer->DevVertexShaderInput, m_pVertexBuffer->DevVertexShaderOutput, vertexCount, m_Shader.Mat4Data["ViewProjection"], m_Shader.Mat4Data["World"]);
 			GPU_ERROR_CHECK(cudaDeviceSynchronize());
 
 			// Primitive assembler
 			gridSize = static_cast<uint32_t>(ceil(primitiveCount / static_cast<float>(m_RenderConfig.BlockSize)));
-			PrimitiveAssemblerKernel << <gridSize, blockSize >> > (m_DevPrimitiveBuffer, primitiveCount, m_pVertexBuffer->DevVertexShaderOutput, m_pIndexBuffer->DevIndices);
+			PrimitiveAssemblerKernel<<<gridSize, blockSize>>>(m_DevPrimitiveBuffer, primitiveCount, m_pVertexBuffer->DevVertexShaderOutput, m_pIndexBuffer->DevIndices);
 			GPU_ERROR_CHECK(cudaDeviceSynchronize());
 
 			if (m_RenderConfig.RasterTech == RasterizerTechnique::eObjectSpace)
@@ -76,21 +76,21 @@ namespace smile
 			else if (m_RenderConfig.RasterTech == RasterizerTechnique::eScreenSpace)
 			{
 				// Bin Rasterizer
-				BinRasterizerKernel << <gridSize, blockSize >> > (m_DevPrimitiveBuffer, primitiveCount, m_DevBins, m_RenderConfig.BinSizeX, m_RenderConfig.BinSizeY,
+				BinRasterizerKernel<<<gridSize, blockSize>>>(m_DevPrimitiveBuffer, primitiveCount, m_DevBins, m_RenderConfig.BinSizeX, m_RenderConfig.BinSizeY,
 					m_BinWidth, m_BinHeight, m_pFramebuffer->Width, m_pFramebuffer->Height);
 				GPU_ERROR_CHECK(cudaDeviceSynchronize());
 
 				// Fine Rasterizer
 				gridSize = { static_cast<uint32_t>(ceil(m_RenderConfig.BinSizeX / static_cast<float>(m_RenderConfig.BlockSize))),
 					static_cast<uint32_t>(ceil(m_RenderConfig.BinSizeY / static_cast<float>(m_RenderConfig.BlockSize))) };
-				FineRasterizerKernel << <gridSize, blockSize >> > (m_DevBins, m_DevPrimitiveBuffer, m_RenderConfig.BinSizeX, m_RenderConfig.BinSizeY, m_BinWidth, m_BinHeight, m_pFramebuffer->DevPixelData, m_pFramebuffer->DevDepthBuffer, m_pFramebuffer->Width);
+				FineRasterizerKernel<<<gridSize, blockSize>>>(m_DevBins, m_DevPrimitiveBuffer, m_RenderConfig.BinSizeX, m_RenderConfig.BinSizeY, m_BinWidth, m_BinHeight, m_pFramebuffer->DevPixelData, m_pFramebuffer->DevDepthBuffer, m_pFramebuffer->Width);
 				GPU_ERROR_CHECK(cudaDeviceSynchronize());
 			}
 
 			// Pixel Shader
 			gridSize = { static_cast<uint32_t>(ceil(m_pFramebuffer->Width / static_cast<float>(m_RenderConfig.BlockSize))),
 								static_cast<uint32_t>(ceil(m_pFramebuffer->Height / static_cast<float>(m_RenderConfig.BlockSize))) };
-			PixelShaderKernel << <gridSize, blockSize >> > (*m_pFramebuffer, m_Shader.Texture2DData["AlbedoMap"]);
+			PixelShaderKernel<<<gridSize, blockSize>>>(*m_pFramebuffer, m_Shader.Texture2DData["AlbedoMap"]);
 			GPU_ERROR_CHECK(cudaDeviceSynchronize());
 
 			// Copy data to host buffer
