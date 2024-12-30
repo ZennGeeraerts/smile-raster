@@ -1,7 +1,10 @@
 #include <device_context.cuh>
 #include <Windows.h>
 #include <DirectXColors.h>
-#include <stdio.h>
+#include <iostream>
+
+#define SDL_MAIN_HANDLED
+#include <SDL_image.h>
 
 bool g_ShouldClose = false;
 
@@ -153,13 +156,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR lpCmdLine, int nCmdShow
 		pColorBuffer, width, height, smile::Raster::ColorbufferFormat::eRGB);
 	pContext->BindFramebuffer(framebuffer);
 
+	const uint32_t vertexCount = 3;
 	float vertices[]{
 		-0.5f, 0.0f, 0.5f,
 		0.0f, 0.5f, 0.5f,
-		0.5f, 0.0f, 0.5f,
+		0.5f, 0.0f, 0.5f
 	};
 	smile::Raster::BufferID vertexBuffer = pContext->CreateVertexBuffer(
-		vertices, 3, 12 * 3
+		vertices, vertexCount, sizeof(float) * 3 * vertexCount
 	);
 
 	uint32_t indices[]{
@@ -168,6 +172,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR lpCmdLine, int nCmdShow
 	smile::Raster::BufferID indexBuffer = pContext->CreateIndexBuffer(
 		indices, 3
 	);
+
+	SDL_Surface* pSurface = IMG_Load("data/uv_grid.png");
+	if (!pSurface)
+	{
+		std::cout << SDL_GetError() << '\n';
+		return 1;
+	}
+
+	smile::Raster::TextureID textureID = pContext->CreateTexture2D(static_cast<uint8_t*>(pSurface->pixels), pSurface->w, pSurface->h);
 
 	while (!g_ShouldClose)
 	{
@@ -184,6 +197,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR lpCmdLine, int nCmdShow
 		DirectX::Colors::DodgerBlue.f[2],
 		DirectX::Colors::DodgerBlue.f[3] }, true);
 
+		pContext->UploadTexture2D("AlbedoMap", textureID);
 		pContext->BindVertexBuffer(vertexBuffer, 12);
 		pContext->BindIndexBuffer(indexBuffer);
 		pContext->DrawIndexed(3);
@@ -193,6 +207,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR lpCmdLine, int nCmdShow
 		BitBlt(hDC, 0, 0, width, height, compHDC, 0, 0, SRCCOPY);
 		ReleaseDC(windowHandle, hDC);
 	}
+
+	SDL_FreeSurface(pSurface);
 
 	SelectObject(compHDC, bitmapOld);
 	DeleteObject(bitmapOld);
